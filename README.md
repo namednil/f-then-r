@@ -1,4 +1,4 @@
 # fertility and reordering
-Code for "Compositional Generalisation with Structured Reordering and Fertility Layers"
+Code for EACL 2023 paper "Compositional Generalisation with Structured Reordering and Fertility Layers"
 
 **Coming soon**
