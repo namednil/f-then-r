@@ -1,0 +1,86 @@
+{
+    "dataset_reader": {
+        "type": "my_seq2seq",
+        "source_token_indexers": {
+            "tokens": {
+                "type": "single_id",
+                "lowercase_tokens": true
+            }
+        },
+        "source_tokenizer": {
+            "type": "whitespace"
+        },
+        "target_token_indexers": {
+            "tokens": {
+                "type": "single_id",
+                "namespace": "target_tokens"
+            }
+        },
+        "target_tokenizer": {
+            "type": "whitespace"
+        }
+    },
+    "model": {
+        "type": "csordas_transformer",
+        "dim_feedforward": 256,
+        "dropout": 0.17004726147063118,
+        "embedding_init": "kaiming",
+        "max_len": 80,
+        "metrics": [
+            {
+                "type": "levenshtein"
+            },
+            {
+                "type": "atis_acc"
+            },
+            {
+                "check_gold": false,
+                "decoding_grammar": {
+                    "type": "atis_bracket"
+                },
+                "type": "wellformed"
+            },
+            {
+                "type": "length_error"
+            }
+        ],
+        "nhead": 9,
+        "num_decoder_layers": 5,
+        "num_encoder_layers": 5,
+        "scale_mode": "down",
+        "state_size": 864,
+        "transformer_type": "relative"
+    },
+    "train_data_path": null,
+    "validation_data_path": null,
+    "test_data_path": null,
+    "trainer": {
+        "callbacks": [
+            {
+                "type": "track_epoch_callback"
+            },
+            {
+                "type": "test_mode"
+            }
+        ],
+        "num_epochs": 50,
+        "optimizer": {
+            "type": "adam",
+            "lr": 5.721757697014076e-05
+        },
+        "validation_metric": "+tree_acc"
+    },
+    "data_loader": {
+        "batch_sampler": {
+            "type": "bucket",
+            "batch_size": 32,
+            "sorting_keys": [
+                "target_tokens"
+            ]
+        }
+    },
+    "evaluate_on_test": true,
+    "numpy_seed": 123,
+    "pytorch_seed": 124,
+    "random_seed": 122
+}

@@ -1,0 +1,71 @@
+{
+    "dataset_reader": {
+        "type": "seq2seq",
+        "delimiter": "\t",
+        "end_symbol": "</s>",
+        "source_token_indexers": {
+            "tokens": {
+                "type": "pretrained_transformer",
+                "model_name": "facebook/bart-base",
+                "namespace": "tokens"
+            }
+        },
+        "source_tokenizer": {
+            "type": "pretrained_transformer",
+            "model_name": "facebook/bart-base"
+        },
+        "start_symbol": "<s>"
+    },
+    "model": {
+        "type": "fertility.baseline.allennlp_bart.Bart",
+        "beam_search": {
+            "beam_size": 5,
+            "max_steps": 80
+        },
+        "metrics": [
+            {
+                "type": "atis_acc"
+            },
+            {
+                "type": "length_error"
+            }
+        ],
+        "model_name": "facebook/bart-base"
+    },
+    "train_data_path": "data/atis/atis_funql_length4_train_brackets.tsv",
+    "validation_data_path": "data/atis/atis_funql_length4_dev_brackets.tsv",
+    "test_data_path": "data/atis/atis_funql_length4_test_brackets.tsv",
+    "trainer": {
+        "cuda_device": 0,
+        "grad_norm": 1,
+        "learning_rate_scheduler": {
+            "type": "polynomial_decay"
+        },
+        "num_epochs": 50,
+        "optimizer": {
+            "type": "huggingface_adamw",
+            "betas": [
+                0.9,
+                0.999
+            ],
+            "correct_bias": true,
+            "eps": 1e-08,
+            "lr": 3e-05
+        },
+        "run_confidence_checks": false,
+        "validation_metric": "+tree_acc"
+    },
+    "data_loader": {
+        "batch_sampler": {
+            "type": "bucket",
+            "batch_size": 16,
+            "sorting_keys": [
+                "source_tokens"
+            ]
+        }
+    },
+    "evaluate_on_test": true,
+    "numpy_seed": 2610,
+    "pytorch_seed": 2611,
+    "random_seed": 2609
+}

@@ -1,0 +1,43 @@
+{
+  "seed": {
+        "sampling strategy": "choice",
+        "choices": [1234,123456]
+  },
+
+  "pretrain_epochs": {
+        "sampling strategy": "integer",
+        "bounds": [3, 10]
+    },
+
+  "length_loss": {
+        "sampling strategy": "loguniform",
+        "bounds": [0.001, 0.1]
+    },
+
+  "thresh": {
+    "sampling strategy": "uniform",
+    "bounds": [0.51, 0.9]
+  },
+
+  "weight": {
+    "sampling strategy": "uniform",
+    "bounds": [0.1, 1.0]
+  },
+
+  "mlp_dim": {
+    "sampling strategy": "choice",
+    "choices": [128, 200, 256, 300]
+  },
+
+  "temperature": {
+    "sampling strategy": "choice",
+    "choices": [1.0, 2.0, 3.0, 4.0, 5.0]
+  },
+
+
+  "split": {
+   "sampling strategy": "choice",
+   "choices": ["template"]
+  }
+}
+

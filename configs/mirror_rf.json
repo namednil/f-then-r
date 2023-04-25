@@ -1,0 +1,148 @@
+{
+    "dataset_reader": {
+        "type": "tsv_reader_with_copy_align",
+        "copy": false,
+        "em_epochs": 150,
+        "source_tokenizer": {
+            "type": "whitespace"
+        },
+        "target_token_indexers": {
+            "tokens": {
+                "type": "single_id",
+                "namespace": "target_tokens"
+            }
+        },
+        "target_tokenizer": {
+            "type": "whitespace"
+        }
+    },
+    "model": {
+        "type": "discrete_nat",
+        "alignment_confidence_thresh": 0.5,
+        "alignment_loss_weight": 0,
+        "compute_loss_during_dev": true,
+        "dev_use_grammar": false,
+        "drop_grad_rate": 0,
+        "encoder": {
+            "type": "stacked_bidirectional_lstm",
+            "hidden_size": 64,
+            "input_size": 128,
+            "layer_dropout_probability": 0.1,
+            "num_layers": 2,
+            "recurrent_dropout_probability": 0.1
+        },
+        "fertility_encoder": {
+            "type": "stacked_bidirectional_lstm",
+            "hidden_size": 64,
+            "input_size": 128,
+            "layer_dropout_probability": 0.1,
+            "num_layers": 2,
+            "recurrent_dropout_probability": 0.1
+        },
+        "fertility_model": {
+            "type": "joint_fertility",
+            "input_dim": 128,
+            "maximum_fertility": 4,
+            "mlp": {
+                "activations": "elu",
+                "dropout": 0.1,
+                "hidden_dims": 128,
+                "input_dim": 128,
+                "num_layers": 1
+            },
+            "positional_dim": 128,
+            "positional_mode": "sum",
+            "temperature": 1
+        },
+        "length_loss_scheduler": {
+            "type": "constant",
+            "constant": 0.02
+        },
+        "metrics": [
+            {
+                "type": "levenshtein"
+            },
+            {
+                "type": "length_error"
+            },
+            {
+                "type": "acc_by_length"
+            }
+        ],
+        "mlp": {
+            "activations": "elu",
+            "dropout": 0.1,
+            "hidden_dims": 128,
+            "input_dim": 128,
+            "num_layers": 1
+        },
+        "pretrain_epochs": 0,
+        "reorder_after_fertility": false,
+        "reorder_before_fertility": true,
+        "reorder_encoder": {
+            "type": "stacked_bidirectional_lstm",
+            "hidden_size": 64,
+            "input_size": 128,
+            "layer_dropout_probability": 0.1,
+            "num_layers": 2,
+            "recurrent_dropout_probability": 0.1
+        },
+        "rho": 0.05,
+        "search_top_k": 1,
+        "skip_connection": true,
+        "source_embedder": {
+            "type": "basic",
+            "token_embedders": {
+                "tokens": {
+                    "type": "embedding",
+                    "embedding_dim": 128
+                }
+            }
+        },
+        "test_search_top_k": 1,
+        "test_use_grammar": false,
+        "use_crf": false
+    },
+    "train_data_path": null,
+    "validation_data_path": null,
+    "test_data_path": null,
+    "trainer": {
+        "callbacks": [
+            {
+                "type": "track_epoch_callback"
+            },
+            {
+                "type": "test_mode"
+            }
+        ],
+        "grad_norm": 5,
+        "num_epochs": 20,
+        "optimizer": {
+            "type": "adam",
+            "lr": 0.001
+        },
+        "validation_metric": "-loss"
+    },
+    "data_loader": {
+        "batch_sampler": {
+            "type": "bucket",
+            "batch_size": 64,
+            "sorting_keys": [
+                "source_tokens"
+            ]
+        }
+    },
+    "evaluate_on_test": true,
+    "numpy_seed": 398,
+    "pytorch_seed": 399,
+    "random_seed": 397,
+    "validation_data_loader": {
+        "batch_sampler": {
+            "type": "bucket",
+            "batch_size": 64,
+            "sorting_keys": [
+                "source_tokens"
+            ]
+        }
+    }
+}

@@ -1,0 +1,230 @@
+{
+    "dataset_reader": {
+        "type": "tsv_reader_with_copy_align",
+        "copy": true,
+        "em_epochs": 150,
+        "non_copyable": [
+            "answer",
+            "area_1",
+            "capital",
+            "capital_1",
+            "capital_2",
+            "city",
+            "cityid",
+            "count",
+            "countryid",
+            "density_1",
+            "elevation_1",
+            "elevation_2",
+            "exclude",
+            "fewest",
+            "high_point_1",
+            "high_point_2",
+            "higher_2",
+            "highest",
+            "intersection",
+            "lake",
+            "largest",
+            "largest_one",
+            "len",
+            "loc_1",
+            "loc_2",
+            "longer",
+            "longest",
+            "low_point_1",
+            "low_point_2",
+            "lower_2",
+            "lowest",
+            "major",
+            "most",
+            "mountain",
+            "next_to_1",
+            "next_to_2",
+            "place",
+            "placeid",
+            "population_1",
+            "river",
+            "riverid",
+            "shortest",
+            "size",
+            "smallest",
+            "smallest_one",
+            "state",
+            "stateid",
+            "sum",
+            "traverse_1",
+            "traverse_2"
+        ],
+        "source_token_indexers": {
+            "tokens": {
+                "type": "single_id",
+                "lowercase_tokens": true
+            }
+        },
+        "source_tokenizer": {
+            "type": "whitespace"
+        },
+        "target_token_indexers": {
+            "tokens": {
+                "type": "single_id",
+                "namespace": "target_tokens"
+            }
+        },
+        "target_tokenizer": {
+            "type": "whitespace"
+        }
+    },
+    "model": {
+        "type": "discrete_copy_nat",
+        "alignment_confidence_thresh": 0.8,
+        "alignment_loss_weight": 0.05,
+        "closed_vocabulary_grammar": true,
+        "compute_loss_during_dev": true,
+        "dev_use_grammar": false,
+        "drop_grad_rate": 0,
+        "encoder": {
+            "type": "stacked_bidirectional_lstm",
+            "hidden_size": 100,
+            "input_size": 200,
+            "layer_dropout_probability": 0.1,
+            "num_layers": 2,
+            "recurrent_dropout_probability": 0.1
+        },
+        "fertility_encoder": {
+            "type": "stacked_bidirectional_lstm",
+            "hidden_size": 100,
+            "input_size": 200,
+            "layer_dropout_probability": 0.1,
+            "num_layers": 2,
+            "recurrent_dropout_probability": 0.1
+        },
+        "fertility_model": {
+            "type": "joint_fertility",
+            "input_dim": 200,
+            "maximum_fertility": 4,
+            "mlp": {
+                "activations": "elu",
+                "dropout": 0.1,
+                "hidden_dims": 128,
+                "input_dim": 200,
+                "num_layers": 1
+            },
+            "positional_dim": 200,
+            "positional_mode": "sum",
+            "temperature": 1
+        },
+        "grammar": {
+            "type": "geo"
+        },
+        "length_loss_scheduler": {
+            "type": "constant",
+            "constant": 0.1
+        },
+        "metrics": [
+            {
+                "type": "levenshtein"
+            },
+            {
+                "check_gold": true,
+                "decoding_grammar": {
+                    "type": "geo"
+                },
+                "type": "wellformed"
+            },
+            {
+                "type": "geo_acc"
+            },
+            {
+                "type": "length_error"
+            }
+        ],
+        "mlp": {
+            "activations": "elu",
+            "dropout": 0.1,
+            "hidden_dims": 128,
+            "input_dim": 200,
+            "num_layers": 1
+        },
+        "pretrain_epochs": 5,
+        "reorder_after_fertility": true,
+        "reorder_before_fertility": false,
+        "reorder_encoder": {
+            "type": "stacked_bidirectional_lstm",
+            "hidden_size": 100,
+            "input_size": 200,
+            "layer_dropout_probability": 0.1,
+            "num_layers": 2,
+            "recurrent_dropout_probability": 0.1
+        },
+        "rho": 0.05,
+        "search_top_k": 1,
+        "skip_connection": true,
+        "source_embedder": {
+            "type": "basic",
+            "token_embedders": {
+                "tokens": {
+                    "type": "embedding",
+                    "embedding_dim": 200,
+                    "pretrained_file": "~/downloads/glove.6B.200d.txt",
+                    "trainable": false
+                }
+            }
+        },
+        "test_search_top_k": 5,
+        "test_use_grammar": true,
+        "use_crf": false
+    },
+    "train_data_path": null,
+    "validation_data_path": null,
+    "test_data_path": null,
+    "trainer": {
+        "callbacks": [
+            {
+                "type": "track_epoch_callback"
+            },
+            {
+                "type": "test_mode"
+            }
+        ],
+        "grad_norm": 5,
+        "num_epochs": 100,
+        "optimizer": {
+            "type": "adam",
+            "lr": 0.001,
+            "parameter_groups": [
+                [
+                    [
+                        "reorder_module_after.score_f.*",
+                        "reorder_module_before.score_f.*"
+                    ],
+                    {
+                        "lr": 1e-06
+                    }
+                ]
+            ]
+        },
+        "validation_metric": "+geo_acc"
+    },
+    "data_loader": {
+        "batch_sampler": {
+            "type": "bucket",
+            "batch_size": 32,
+            "sorting_keys": [
+                "target_tokens"
+            ]
+        }
+    },
+    "evaluate_on_test": true,
+    "numpy_seed": 8778,
+    "pytorch_seed": 8779,
+    "random_seed": 8777,
+    "validation_data_loader": {
+        "batch_sampler": {
+            "type": "bucket",
+            "batch_size": 64,
+            "sorting_keys": [
+                "target_tokens"
+            ]
+        }
+    }
+}
