@@ -1,5 +1,5 @@
 # Compositional Generalisation with Structured Reordering and Fertility Layers
-This is the official code for our EACL 2023 paper [Compositional Generalisation with Structured Reordering and Fertility Layers](https://arxiv.org/abs/2210.03183).
+This is the official code for our EACL 2023 paper [Compositional Generalisation with Structured Reordering and Fertility Layers](https://aclanthology.org/2023.eacl-main.159/).
 
 
 ## Usage
@@ -63,14 +63,17 @@ While the computation takes place on the CPU, we found this implementation is st
 ## Citation
 
 ```
-@inproceedings{lindemann-et-al-2023-compositional,
-    title = "{C}ompositional {G}eneralisation with {S}tructured {R}eordering and {F}ertility {L}ayers",
-    author = "Lindemann, Matthias and
-      Koller, Alexander and
+@inproceedings{lindemann-etal-2023-compositional,
+    title = "Compositional Generalisation with Structured Reordering and Fertility Layers",
+    author = "Lindemann, Matthias  and
+      Koller, Alexander  and
       Titov, Ivan",
     booktitle = "Proceedings of the 17th Conference of the European Chapter of the Association for Computational Linguistics",
+    month = may,
     year = "2023",
     address = "Dubrovnik, Croatia",
-    url = "https://arxiv.org/abs/2210.03183",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2023.eacl-main.159",
+    pages = "2172--2186"
 }
 ```
